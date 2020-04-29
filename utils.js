@@ -21,3 +21,25 @@ exports.convertToClassName = (input) => {
 exports.convertToObjectName = (input) => {
   return input.charAt(0).toUpperCase() + input.slice(1);
 };
+
+exports.convertClassNameToFileName = (className) => {
+  let input = className;
+
+  input = input.charAt(0).toUpperCase() + input.slice(1);
+
+  const capitalLetters = [];
+  for (let i = 0; i < input.length; i++) {
+    if (input.charAt(i).match(/[A-Z]/)) {
+      capitalLetters.push(i);
+    }
+  }
+
+  const tmp = input.toLowerCase();
+  let res = '';
+
+  capitalLetters.forEach((val, index, array) => {
+    res += tmp.substring(val, array[index + 1]) + '.';
+  });
+  res += 'ts';
+  return res;
+};
