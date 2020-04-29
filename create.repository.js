@@ -14,10 +14,6 @@ exports.createRepository = ({ featureName, entityName, methodName }) => {
     `${fileName}.repository.ts`,
     templateConcreteRepository({ className, objectName, methodName, fileName })
   );
-  files.set(
-    `mock.${fileName}.repository.ts`,
-    templateMockRepository({ className, objectName, methodName, fileName })
-  );
   return files;
 };
 
@@ -42,13 +38,4 @@ templateConcreteRepository = ({
             throw new Error('not implemented yet');
         };
     }
-`;
-templateMockRepository = ({ className, objectName, methodName, fileName }) => `
-import {Abstract${className}Repository} from './abstract.${fileName}.repository';
-
-    export class Mock${className}Repository extends Abstract${className}Repository {
-        async ${methodName}(params?:Partial<${objectName}Entity>):Promise<${objectName}Entity>{
-            return ${objectName}Model.fromJSON({});
-        };
-}
 `;

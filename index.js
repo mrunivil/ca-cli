@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const dataSource = require('./create.data.source');
 const repository = require('./create.repository');
-const usecase = require('./create.usecase');
+const useCase = require('./create.use.case');
 
 const promptAttributes = ['featureName', 'entityName', 'methodName'];
 
@@ -65,11 +65,11 @@ const createFeature = ({ featureName, entityName, methodName }) => {
         methodName,
       });
 
-      const usecases = usecase.createUsecase({
+      const useCases = useCase.createUseCase({
         featureName,
         entityName,
         methodName,
-      })
+      });
 
       dataSources.forEach((val, key) => {
         fs.writeFileSync(
@@ -85,14 +85,12 @@ const createFeature = ({ featureName, entityName, methodName }) => {
         );
       });
 
-      usecases.forEach((val, key) => {
+      useCases.forEach((val, key) => {
         fs.writeFileSync(
           `${process.cwd()}/output/${featureName}/domain/use-case/${key}`,
           val
         );
       });
-
-
     } catch (error) {
       console.log(error);
     }
