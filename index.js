@@ -2,6 +2,9 @@ const Prompt = require('prompt');
 const fs = require('fs');
 
 const dataSource = require('./create.data.source');
+const repository = require('./create.repository');
+const usecase = require('./create.usecase');
+
 const promptAttributes = ['featureName', 'entityName', 'methodName'];
 
 Prompt.start();
@@ -56,12 +59,40 @@ const createFeature = ({ featureName, entityName, methodName }) => {
         methodName,
       });
 
+      const repositories = repository.createRepository({
+        featureName,
+        entityName,
+        methodName,
+      });
+
+      const usecases = usecase.createUsecase({
+        featureName,
+        entityName,
+        methodName,
+      })
+
       dataSources.forEach((val, key) => {
         fs.writeFileSync(
           `${process.cwd()}/output/${featureName}/data/data-source/${key}`,
           val
         );
       });
+
+      repositories.forEach((val, key) => {
+        fs.writeFileSync(
+          `${process.cwd()}/output/${featureName}/data/repository/${key}`,
+          val
+        );
+      });
+
+      usecases.forEach((val, key) => {
+        fs.writeFileSync(
+          `${process.cwd()}/output/${featureName}/domain/use-case/${key}`,
+          val
+        );
+      });
+
+
     } catch (error) {
       console.log(error);
     }
