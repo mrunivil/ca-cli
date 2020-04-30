@@ -1,9 +1,9 @@
 const utils = require('./utils');
 const fs = require('fs');
 exports.create = (className) => {
-  files = new Map();
-  const entityName = utils.convertToObjectName(className);
-  files.set();
+    files = new Map();
+    const entityName = utils.convertToObjectName(className);
+    files.set();
 };
 
 templateModel = ({ className }) => `
@@ -27,7 +27,7 @@ templateModel = ({ className }) => `
             }
         }
 
-        staticFrom${className}Entity({id}:Partial<${className}Entity>):${className}Model{
+        static from${className}Entity({id}:Partial<${className}Entity>):${className}Model{
             return new ${className}Model({id});
         }
     }
