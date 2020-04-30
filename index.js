@@ -5,10 +5,22 @@ const dataSource = require('./create.data.source');
 const repository = require('./create.repository');
 const useCase = require('./create.use.case');
 
-const promptAttributes = ['featureName', 'entityName', 'methodName'];
+let schema = {
+  properties: {
+    featureName: {
+      description: 'feature name, in kebab-case (get-product)'
+    },
+    entityName: {
+      description: 'entity / model name, in PascalCase (ProductList)'
+    },
+    methodName: {
+      description: 'method name, in camelCase (getProduct)'
+    }
+  }
+}
 
 Prompt.start();
-Prompt.get(promptAttributes, (err, result) => {
+Prompt.get(schema, (err, result) => {
   if (err) {
     console.error(err);
     return 1;
