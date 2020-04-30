@@ -22,12 +22,14 @@ exports.createDataSource = ({ featureName, entityName, methodName }) => {
 };
 
 templateAbstractDataSource = ({ className, objectName, methodName }) =>
-  `import { AbstractCustomError } from '../../core/errors';
-import { AbstractDataSource } from '../../core/data-source/abstract.data.source';
-
-export abstract class Abstract${className}DataSource extends AbstractDataSource {
-  abstract ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>;
-}
+  `
+  import { AbstractDataSource } from '../../../../core/data/data-source/abstract.data.source';
+  import { ${objectName}Model } from '../model/${utils.convertClassNameToImport(
+    objectName + 'Model'
+  )}';
+  export abstract class Abstract${className}DataSource extends AbstractDataSource {
+    abstract ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>;
+  }
 `;
 templateConcreteDataSource = ({
   className,
@@ -35,22 +37,31 @@ templateConcreteDataSource = ({
   methodName,
   fileName,
 }) =>
-  `import { Injectable } from '@angular/core';
-import { Abstract${className}DataSource } from './abstract.${fileName}.data.source';
+  `
+  import { Injectable } from '@angular/core';
+  import { Abstract${className}DataSource } from './abstract.${fileName}.data.source';
+  import { ${objectName}Model } from '../model/${utils.convertClassNameToImport(
+    objectName + 'Model'
+  )}';
 
-@Injectable()
-export class ${className}DataSource extends Abstract${className}DataSource {
-  async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
-    throw new Error('not implemented yet');
-  };
-}
+  @Injectable()
+  export class ${className}DataSource extends Abstract${className}DataSource {
+    async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
+      throw new Error('not implemented yet');
+    };
+  }
 `;
 templateMockDataSource = ({ className, objectName, methodName, fileName }) =>
-  `import { Abstract${className}DataSource } from './abstract.${fileName}.data.source';
-
-export class Mock${className}DataSource extends Abstract${className}DataSource {
-  async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
-    return ${objectName}Model.fromJSON({});
-  };
-}
+  `
+  import { Injectable } from '@angular/core';
+  import { Abstract${className}DataSource } from './abstract.${fileName}.data.source';
+  import { ${objectName}Model } from '../model/${utils.convertClassNameToImport(
+    objectName + 'Model'
+  )}';
+  @Injectable()
+  export class Mock${className}DataSource extends Abstract${className}DataSource {
+    async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
+      return ${objectName}Model.fromJSON({});
+    };
+  }
 `;
