@@ -21,34 +21,36 @@ exports.createDataSource = ({ featureName, entityName, methodName }) => {
   return files;
 };
 
-templateAbstractDataSource = ({ className, objectName, methodName }) => `
-    import {AbstractCustomError} from '../../core/errors';
-    import {AbstractDataSource} from '../../core/data-source/abstract.data.source';
+templateAbstractDataSource = ({ className, objectName, methodName }) =>
+  `import { AbstractCustomError } from '../../core/errors';
+import { AbstractDataSource } from '../../core/data-source/abstract.data.source';
 
-    export abstract class Abstract${className}DataSource extends AbstractDataSource {
-        abstract ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>;
-    }
+export abstract class Abstract${className}DataSource extends AbstractDataSource {
+  abstract ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>;
+}
 `;
 templateConcreteDataSource = ({
   className,
   objectName,
   methodName,
   fileName,
-}) => `
-    import {Abstract${className}DataSource} from './abstract.${fileName}.data.source';
+}) =>
+  `import { Injectable } from '@angular/core';
+import { Abstract${className}DataSource } from './abstract.${fileName}.data.source';
 
-    export class ${className}DataSource extends Abstract${className}DataSource {
-        async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
-            throw new Error('not implemented yet');
-        };
-    }
+@Injectable()
+export class ${className}DataSource extends Abstract${className}DataSource {
+  async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
+    throw new Error('not implemented yet');
+  };
+}
 `;
-templateMockDataSource = ({ className, objectName, methodName, fileName }) => `
-import {Abstract${className}DataSource} from './abstract.${fileName}.data.source';
+templateMockDataSource = ({ className, objectName, methodName, fileName }) =>
+  `import { Abstract${className}DataSource } from './abstract.${fileName}.data.source';
 
-    export class Mock${className}DataSource extends Abstract${className}DataSource {
-        async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
-            return ${objectName}Model.fromJSON({});
-        };
+export class Mock${className}DataSource extends Abstract${className}DataSource {
+  async ${methodName}(params?:Partial<${objectName}Model>):Promise<${objectName}Model>{
+    return ${objectName}Model.fromJSON({});
+  };
 }
 `;

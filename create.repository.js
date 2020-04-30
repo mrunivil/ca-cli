@@ -17,25 +17,29 @@ exports.createRepository = ({ featureName, entityName, methodName }) => {
   return files;
 };
 
-templateAbstractRepository = ({ className, objectName, methodName }) => `
-    import {AbstractCustomError} from '../../core/errors';
-    import {AbstractRepository} from '../../core/data/repository/abstract.repository';
+templateAbstractRepository = ({ className, objectName, methodName }) =>
+  `import { AbstractCustomError } from '../../core/errors';
+import { AbstractRepository } from '../../core/data/repository/abstract.repository';
 
-    export abstract class Abstract${className}Repository extends AbstractRepository {
-        abstract ${methodName}(params?:Partial<${objectName}Entity>):Promise<${objectName}Entity>;
-    }
+export abstract class Abstract${className}Repository extends AbstractRepository {
+  abstract ${methodName}(params?:Partial<${objectName}Entity>):Promise<${objectName}Entity>;
+}
 `;
 templateConcreteRepository = ({
   className,
   objectName,
   methodName,
   fileName,
-}) => `
-    import {Abstract${className}Repository} from './abstract.${fileName}.repository';
+}) =>
+  `import { Abstract${className}DataSource } from '../data-source/abstract.${fileName}.data.source';
+import { Abstract${className}Repository } from './abstract.${fileName}.repository';
 
-    export class ${className}Repository extends Abstract${className}Repository {
-        async ${methodName}(params?:Partial<${objectName}Entity>):Promise<${objectName}Entity>{
-            throw new Error('not implemented yet');
-        };
-    }
+export class ${className}Repository extends Abstract${className}Repository {
+  constructor(private dataSource: Abstract${className}DataSource) {
+    super();
+  }
+  async ${methodName}(params?:Partial<${objectName}Entity>):Promise<${objectName}Entity>{
+    throw new Error('not implemented yet');
+  };
+}
 `;
