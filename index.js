@@ -11,17 +11,20 @@ let schema = {
     featureName: {
       description: `${colors.bgGreen(colors.black('Feature Name'))}, please type it in ${colors.green('kebab-case')} (example: get-product)`,
       pattern: /^[a-z\-]+$/,
-      message: 'Only small letters and dashes are allow'
+      message: 'Field is required. Only small letters and dashes are allow.',
+      required: true
     },
     entityName: {
       description: `${colors.bgGreen(colors.black('Entity / Model Name'))}, please type it in ${colors.green('PascalCase')} (example: ProductList)`,
       pattern: /^[A-Z]{1}[a-zA-Z]+$/,
-      message: 'Only letters are allow, frist must be capital letter'
+      message: 'Field is required. Only letters are allow, frist must be capital letter.',
+      required: true
     },
     methodName: {
       description: `${colors.bgGreen(colors.black('Method Name'))}, please type it in ${colors.green('camelCase')} (example: getProduct)`,
       pattern: /^[a-z]{1}[a-zA-Z]+$/,
-      message: 'Only letters are allow, frist must be small letter'
+      message: 'Field is required. Only letters are allow, frist must be small letter.',
+      required: true
     }
   }
 }
