@@ -38,24 +38,24 @@ let schema = {
   },
 };
 
-feature.create({
-  featureName: 'test',
-  entityName: 'test',
-  methodName: 'doTest',
-});
-
-// Prompt.start();
-// Prompt.get(schema, (err, result) => {
-//   if (err) {
-//     console.error(err);
-//     return 1;
-//   }
-//   feature.create({
-//     featureName: result.featureName,
-//     entityName: result.entityName,
-//     methodName: result.methodName,
-//   });
+// feature.create({
+//   featureName: 'test',
+//   entityName: 'test',
+//   methodName: 'doTest',
 // });
+
+Prompt.start();
+Prompt.get(schema, (err, result) => {
+  if (err) {
+    console.error(err);
+    return 1;
+  }
+  feature.create({
+    featureName: result.featureName,
+    entityName: result.entityName,
+    methodName: result.methodName,
+  });
+});
 
 // ask for feature name
 // ask for entity name
