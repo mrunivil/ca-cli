@@ -8,12 +8,6 @@ const colors = require('colors/safe');
 const core = require('./create.core');
 const { exec } = require('child_process');
 exports.create = ({ featureName, entityName, methodName }) => {
-  try {
-    exec('rm -rf ./output');
-    // fs.rmdirSync(`${process.cwd()}/output`, { recursive: true });
-  } catch (error) {
-    console.log(error);
-  }
   if (!fs.existsSync(`${process.cwd()}/output`)) {
     fs.mkdirSync(`${process.cwd()}/output`);
   }
