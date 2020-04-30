@@ -1,4 +1,5 @@
 const Prompt = require('prompt');
+const colors = require('colors/safe');
 const fs = require('fs');
 
 const dataSource = require('./create.data.source');
@@ -8,13 +9,19 @@ const useCase = require('./create.use.case');
 let schema = {
   properties: {
     featureName: {
-      description: 'feature name, in kebab-case (get-product)'
+      description: `${colors.bgGreen(colors.black('Feature Name'))}, please type it in ${colors.green('kebab-case')} (example: get-product)`,
+      pattern: /^[a-z\-]+$/,
+      message: 'Only small letters and dashes are allow'
     },
     entityName: {
-      description: 'entity / model name, in PascalCase (ProductList)'
+      description: `${colors.bgGreen(colors.black('Entity / Model Name'))}, please type it in ${colors.green('PascalCase')} (example: ProductList)`,
+      pattern: /^[A-Z]{1}[a-zA-Z]+$/,
+      message: 'Only letters are allow, frist must be capital letter'
     },
     methodName: {
-      description: 'method name, in camelCase (getProduct)'
+      description: `${colors.bgGreen(colors.black('Method Name'))}, please type it in ${colors.green('camelCase')} (example: getProduct)`,
+      pattern: /^[a-z]{1}[a-zA-Z]+$/,
+      message: 'Only letters are allow, frist must be small letter'
     }
   }
 }
@@ -103,8 +110,9 @@ const createFeature = ({ featureName, entityName, methodName }) => {
           val
         );
       });
+      console.log(`\nFeature ${colors.bgGreen(colors.black(`'${featureName}'`))} successfully created`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 };
