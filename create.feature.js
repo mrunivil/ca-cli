@@ -6,9 +6,11 @@ const useCase = require('./create.use.case');
 const fs = require('fs');
 const colors = require('colors/safe');
 const core = require('./create.core');
+const { exec } = require('child_process');
 exports.create = ({ featureName, entityName, methodName }) => {
   try {
-    fs.rmdirSync(`${process.cwd()}/output`, { recursive: true });
+    exec('rm -rf ./output');
+    // fs.rmdirSync(`${process.cwd()}/output`, { recursive: true });
   } catch (error) {
     console.log(error);
   }
