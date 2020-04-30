@@ -16,18 +16,25 @@ exports.create = ({ featureName, entityName, methodName }) => {
   return files;
 };
 
-templateAbstractUseCase = ({ className, objectName, methodName }) =>
-  `import { AbstractCustomError } from '../../core/errors';
-import { AbstractUseCase } from '../../core/domain/use-case/abstract.use.case';
+templateAbstractUseCase = ({
+  entityClassName,
+  entityClassImportName,
+  useCaseClassName,
+}) =>
+  `
+  import { ${entityClassName} } from '../entity/${entityClassImportName}';
+  import { AbstractUseCase } from '../../../../core/domain/use-case/abstract.use.case';
+  import { AbstractCustomError } from '../../../../core/errors';
 
-export abstract class Abstract${className}UseCase extends AbstractUseCase {
-  abstract execute(params?:Partial<${objectName}Entity>): Promise<${objectName}Entity | AbstractCustomError>;
-}
+  export abstract class Abstract${useCaseClassName}UseCase extends AbstractUseCase {
+    abstract execute(params?:Partial<${entityClassName}>): Promise<${entityClassName} | AbstractCustomError>;
+  }
 `;
-templateConcreteUseCase = ({ className, objectName, methodName, fileName }) =>
-  `import { Injectable } from '@angular/core';
-import { Abstract${className}UseCase } from './abstract.${fileName}.use.case';
-import { Abstract${className}Repository } from '../data/repository/abstract.get.family.repository';
+templateConcreteUseCase = ({ entityClassName, useCaseClassName }) =>
+  `
+  import { Injectable } from '@angular/core';
+  import { Abstract${className}UseCase } from './abstract.${fileName}.use.case';
+  import { Abstract${className}Repository } from '../data/repository/abstract.get.family.repository';
 
 @Injectable()
 export class ${className}UseCase extends AbstractUseCase {

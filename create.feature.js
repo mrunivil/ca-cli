@@ -1,6 +1,6 @@
 const dataSource = require('./create.data.source');
 const model = require('./create.model');
-const entity = require('./crete.entity');
+const entity = require('./create.entity');
 const repository = require('./create.repository');
 const useCase = require('./create.use.case');
 const fs = require('fs');
@@ -26,7 +26,7 @@ exports.create = ({ featureName, entityName, methodName }) => {
         methodName,
       });
 
-      const models = model.create({ entityName });
+      const models = model.create({ featureName, entityName, methodName });
 
       const repositories = repository.createRepository({
         featureName,
@@ -34,7 +34,7 @@ exports.create = ({ featureName, entityName, methodName }) => {
         methodName,
       });
 
-      const entities = entity.create({ entityName });
+      const entities = entity.create({ featureName, entityName, methodName });
 
       const useCases = useCase.create({
         featureName,
@@ -94,10 +94,7 @@ exports.create = ({ featureName, entityName, methodName }) => {
       });
 
       models.forEach((val, key) => {
-        fs.writeFileSync(
-          `${process.cwd()}/output/features/${featureName}/data/model/${key}`,
-          val
-        );
+        fs.writeFileSync(`${key}`, val);
       });
 
       repositories.forEach((val, key) => {
@@ -108,10 +105,7 @@ exports.create = ({ featureName, entityName, methodName }) => {
       });
 
       entities.forEach((val, key) => {
-        fs.writeFileSync(
-          `${process.cwd()}/output/features/${featureName}/domain/entity/${key}`,
-          val
-        );
+        fs.writeFileSync(`${key}`, val);
       });
 
       useCases.forEach((val, key) => {

@@ -1,45 +1,79 @@
 const fs = require('fs');
 const utils = require('./utils');
 exports.createRepository = ({ featureName, entityName, methodName }) => {
+  const entityClassName = `${utils.pascalToClassName(entityName)}Entity`;
+  const entityImportClassName = `${utils.pascalToImportClassName(
+    entityClassName
+  )}`;
+
+  const repositoryClassName = `${utils.convertToClassName(featureName)}`;
+  const repositoryFileName = `${utils.convertToFileName(featureName)}`;
+  const importFileName = `${utils.convertToFileName(featureName)}`;
+
   files = new Map();
-  const fileName = utils.convertToFileName(featureName);
-  const className = utils.convertToClassName(featureName);
-  const objectName = utils.convertToObjectName(entityName);
 
   files.set(
-    `abstract.${fileName}.repository.ts`,
-    templateAbstractRepository({ className, objectName, methodName, fileName })
+    `abstract.${repositoryFileName}.repository.ts`,
+    templateAbstractRepository({
+      entityClassName,
+      entityImportClassName,
+      repositoryClassName,
+      repositoryFileName,
+      methodName,
+      importFileName,
+    })
   );
   files.set(
-    `${fileName}.repository.ts`,
-    templateConcreteRepository({ className, objectName, methodName, fileName })
+    `${repositoryFileName}.repository.ts`,
+    templateConcreteRepository({
+      entityClassName,
+      entityImportClassName,
+      repositoryClassName,
+      repositoryFileName,
+      methodName,
+      importFileName,
+    })
   );
   return files;
 };
 
-templateAbstractRepository = ({ className, objectName, methodName }) =>
-  `import { AbstractCustomError } from '../../core/errors';
-import { AbstractRepository } from '../../core/data/repository/abstract.repository';
+templateAbstractRepository = ({
+  entityClassName,
+  entityImportClassName,
+  repositoryClassName,
+  repositoryFileName,
+  methodName,
+  importFileName,
+}) =>
+  `
+  import { AbstractCustomError } from '../../../../core/errors';
+  import { AbstractRepository } from '../../../../core/data/repository/abstract.repository';
+  import { ${entityClassName} } from '../../domain/entity/${entityImportClassName}';
 
-export abstract class Abstract${className}Repository extends AbstractRepository {
-  abstract ${methodName}(params?:Partial<${objectName}Entity>):Promise<${objectName}Entity>;
-}
+  export abstract class Abstract${repositoryClassName}Repository extends AbstractRepository {
+    abstract ${methodName}(params?:Partial<${entityClassName}>):Promise<${entityClassName} | AbstractCustomError>;
+  }
 `;
 templateConcreteRepository = ({
-  className,
-  objectName,
+  entityClassName,
+  entityImportClassName,
+  repositoryClassName,
+  repositoryFileName,
   methodName,
-  fileName,
+  importFileName,
 }) =>
-  `import { Abstract${className}DataSource } from '../data-source/abstract.${fileName}.data.source';
-import { Abstract${className}Repository } from './abstract.${fileName}.repository';
+  `
+  import { AbstractCustomError } from '../../../../core/errors';
+  import { Abstract${repositoryClassName}DataSource } from '../data-source/abstract.${importFileName}.data.source';
+  import { Abstract${repositoryClassName}Repository } from './abstract.${importFileName}.repository';
+  import { ${entityClassName} } from '../../domain/entity/${entityImportClassName}';
 
-export class ${className}Repository extends Abstract${className}Repository {
-  constructor(private dataSource: Abstract${className}DataSource) {
-    super();
+  export class ${repositoryClassName}Repository extends Abstract${repositoryClassName}Repository {
+    constructor(private dataSource: Abstract${repositoryClassName}DataSource) {
+      super();
+    }
+    async ${methodName}(params?:Partial<${entityClassName}>):Promise<${entityClassName} | AbstractCustomError>{
+      throw new Error('not implemented yet');
+    };
   }
-  async ${methodName}(params?:Partial<${objectName}Entity>):Promise<${objectName}Entity>{
-    throw new Error('not implemented yet');
-  };
-}
 `;
